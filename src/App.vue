@@ -1,11 +1,13 @@
 <script setup>
-import IntroView from './components/IntroView.vue'
+import IntroView from './components/Intro.vue'
+import HomeView from './components/Home.vue'
+import VoiceView from './components/Voice.vue'
+import ScanView from './components/Scan.vue'
 </script>
 
 <template>
-  <div>
-    <IntroView />
-
+  <div class="main">
+    <RouterView />
   </div>
 </template>
 
