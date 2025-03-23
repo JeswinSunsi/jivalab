@@ -344,14 +344,14 @@ const submitRecording = async () => {
         formData.append('file', audioBlob.value, 'recording.wav');
         formData.append('transcript', transcript.value);
         PDFLoading.value = true;
-        const response = await fetch('https://neurotone-docker.onrender.com/analyze', {
+        console.log(PDFLoading.value)
+        const response = await fetch('https://305d-14-139-184-222.ngrok-free.app/predict/park', {
             method: 'POST',
             body: formData,
         });
 
         if (response.ok) {
             const blob = await response.blob();
-
             const downloadUrl = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = downloadUrl;
@@ -361,8 +361,6 @@ const submitRecording = async () => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-
-            // Clean up the URL object
             window.URL.revokeObjectURL(downloadUrl);
         } else {
             const errorText = await response.text();
@@ -392,7 +390,7 @@ const submitRecording = async () => {
 }
 
 .loading {
-    background-color: #f5b4d3;
+    background-color: #8AACB3 !important;
 }
 
 .next-btn {
