@@ -100,7 +100,6 @@
 <script setup>
 import { ref } from 'vue';
 import { useRoute } from "vue-router";
-import { MotionPlugin } from '@vueuse/motion';
 
 const route = useRoute();
 const disease = route.params.disease;
