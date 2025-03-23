@@ -20,17 +20,17 @@
         <div class="conditions-section">
           <div class="scrolling-container">
             <div class="condition-row row-1">
-              <span class="test-tag">Pneumonia</span>
-            <span class="test-tag">Parkinson's Syndrome</span>
-            <span class="test-tag">Brain Tumor</span>
-            <span class="test-tag">Lateral Sclerosis</span>
-            <span class="test-tag">Pneumonia</span>
+              <button class="condition-button">Pneumonia</button>
+            <button class="condition-button">Parkinson's Syndrome</button>
+            <button class="condition-button">Brain Tumor</button>
+            <button class="condition-button">Lateral Sclerosis</button>
+            <button class="condition-button">Pneumonia</button>
               <!-- Duplicate buttons for continuous scrolling effect -->
-              <span class="test-tag">Pneumonia</span>
-              <span class="test-tag">Parkinson's Syndrome</span>
-              <span class="test-tag">Brain Tumor</span>
-              <span class="test-tag">Lateral Sclerosis</span>
-              <span class="test-tag">Pneumonia</span>
+              <button class="condition-button">Pneumonia</button>
+              <button class="condition-button">Parkinson's Syndrome</button>
+              <button class="condition-button">Brain Tumor</button>
+              <button class="condition-button">Lateral Sclerosis</button>
+              <button class="condition-button">Pneumonia</button>
             </div>
           </div>
           
