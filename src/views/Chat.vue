@@ -82,13 +82,12 @@
       emit('message-sent', userMessage);
       
       const messageText = newMessage.value;
-      newMessage.value = ''; // Clear input field
+      newMessage.value = '';
       scrollToBottom();
       
       isLoading.value = true;
       
       try {
-        // Send POST request to the chat API using fetch
         const response = await fetch('https://305d-14-139-184-222.ngrok-free.app/chat', {
           method: 'POST',
           headers: {
@@ -112,7 +111,6 @@
         
       } catch (error) {
         console.error('Error sending message:', error);
-        // Add error message to the chat
         messages.value.push({
           text: 'Sorry, there was an error sending your message. Please try again.',
           sender: 'bot'
