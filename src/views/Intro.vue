@@ -85,7 +85,7 @@
     max-width: 420px;
     height: 100%;
     background-color: #e8f4ff;
-    padding-top: 1rem;
+    padding-top: 3rem;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -147,7 +147,7 @@
   }
   
   .conditions-section {
-    margin-bottom: 2rem;
+    margin-bottom: 0rem;
   }
   
   
@@ -209,7 +209,7 @@
   .cta-section {
     display: flex;
     justify-content: center;
-    margin-top: auto;
+    margin-top: 5%;
     padding-bottom: 2rem;
   }
   
