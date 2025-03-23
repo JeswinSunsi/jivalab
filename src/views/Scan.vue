@@ -10,7 +10,7 @@
           <img src="../assets/bellicon.png" alt="Notifications" class="icon-placeholder">
         </div>
         <div class="profile-icon">
-          <img src="../assets/usericon.png" alt="Notifications" class="icon-placeholder">
+          <img src="../assets/usericon.png" alt="Notifications" class="icon-placeholder" @click="$router.push('/profile')">
         </div>
       </div>
     </header>
@@ -23,7 +23,6 @@
         </div>
       </div>
 
-      <!-- Invisible file input -->
       <input 
         type="file" 
         ref="fileInput" 
@@ -33,7 +32,9 @@
       />
 
       <div class="instructions-list">
-        <div class="instruction-item">
+        <div class="instruction-item" v-motion
+          :initial="{ x: -50, opacity: 0 }"
+          :enter="{ x: 0, opacity: 1, transition: { delay: 100 } }">
           <div class="instruction-number">1</div>
           <div class="instruction-text">
             <p style="color: #0896B6;">Supported files<span class="highlight"> include JPG, PNG</span></p>
@@ -49,7 +50,9 @@
         class="record-button" 
         @click="uploadImage" 
         :disabled="!hasImage || isLoading"
-        :class="{ 'button-disabled': !hasImage || isLoading }"
+        :class="{ 'button-disabled': !hasImage || isLoading }" v-motion
+          :initial="{ x: -50, opacity: 0 }"
+          :enter="{ x: 0, opacity: 1, transition: { delay: 300 } }"
       >
         {{ isLoading ? 'Uploading...' : 'My files are ready' }}
       </button>
@@ -61,6 +64,7 @@
 import { ref } from 'vue';
 
 import { useRoute } from "vue-router"
+import { MotionPlugin } from '@vueuse/motion';
 const route = useRoute()
 const disease = route.params.disease
 

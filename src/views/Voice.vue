@@ -10,7 +10,7 @@
           <img src="../assets/bellicon.png" alt="Notifications" class="icon-placeholder">
         </div>
         <div class="profile-icon">
-          <img src="../assets/usericon.png" alt="Notifications" class="icon-placeholder">
+          <img src="../assets/usericon.png" alt="Notifications" class="icon-placeholder" @click="$router.push('/profile')">
         </div>
       </div>
     </header>
@@ -25,7 +25,9 @@
 
       <h2 class="title">Voice Analysis Instructions</h2>
       <div class="instructions-list">
-        <div class="instruction-item">
+        <div class="instruction-item" v-motion
+          :initial="{ x: -50, opacity: 0 }"
+          :enter="{ x: 0, opacity: 1, transition: { delay: 100 } }">
           <div class="instruction-number">1</div>
           <div class="instruction-text">
             <p style="color: #0896B6;">Find a quiet environment <span class="highlight">with minimal background
@@ -33,7 +35,9 @@
           </div>
         </div>
 
-        <div class="instruction-item">
+        <div class="instruction-item" v-motion
+          :initial="{ x: -50, opacity: 0 }"
+          :enter="{ x: 0, opacity: 1, transition: { delay: 300 } }">
           <div class="instruction-number">2</div>
           <div class="instruction-text">
             <p style="color: #0896B6;">Hold your device <span class="highlight">about 6 inches from your mouth</span>
@@ -41,7 +45,9 @@
           </div>
         </div>
 
-        <div class="instruction-item">
+        <div class="instruction-item" v-motion
+          :initial="{ x: -50, opacity: 0 }"
+          :enter="{ x: 0, opacity: 1, transition: { delay: 500 } }">
           <div class="instruction-number">3</div>
           <div class="instruction-text">
             <p style="color: #0896B6;">Read the provided text clearly <span class="highlight">at your normal speaking
@@ -49,8 +55,6 @@
           </div>
         </div>
       </div>
-
-
 
       <span style="display: flex; flex-direction: column; align-items: start;" v-show="firstRecordingStarted">
         <div class="prompt-box">
@@ -74,8 +78,13 @@
         </select>
       </span>
 
-
-      <button class="record-button" @click="toggleRecording" v-show="!hasRecorded">
+      <button v-motion
+        :initial="{ y: 20, opacity: 0 }"
+        :enter="{ y: 0, opacity: 1, transition: { delay: 700 } }"
+        class="record-button" 
+        @click="toggleRecording" 
+        v-show="!hasRecorded"
+      >
         {{ isRecording ? 'Recording...' : "I'm ready" }}
       </button>
 
@@ -90,25 +99,26 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRoute } from "vue-router";
+import { MotionPlugin } from '@vueuse/motion';
 
-import { useRoute } from "vue-router"
-const route = useRoute()
-const disease = route.params.disease
+const route = useRoute();
+const disease = route.params.disease;
 
 const isRecording = ref(false);
 const hasRecorded = ref(false);
 const transcript = ref('');
 const recognition = ref(null);
 const spokenWordIndices = ref([]);
-let promptIndex = 0
-const promptContent = ref(["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"])
-let promptText = ref("THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING")
-const promptWords = ref(promptText.value.split(' '))
-const firstRecordingStarted = ref(false)
+let promptIndex = 0;
+const promptContent = ref(["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"]);
+let promptText = ref("THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING");
+const promptWords = ref(promptText.value.split(' '));
+const firstRecordingStarted = ref(false);
 
-const selectedLanguage = ref('english')
+const selectedLanguage = ref('english');
 
-const PDFLoading = ref(false)
+const PDFLoading = ref(false);
 const mediaRecorder = ref(null);
 const audioContext = ref(null);
 const audioStream = ref(null);
@@ -116,9 +126,8 @@ const audioBlob = ref(null);
 const processorNode = ref(null);
 const recordedSamples = ref([]);
 
-
 function changeLanguage() {
-  console.log(selectedLanguage.value)
+  console.log(selectedLanguage.value);
   if (selectedLanguage.value === "english") {
     promptContent.value = ["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
     promptText.value = promptContent.value[0];
@@ -135,27 +144,28 @@ function changeLanguage() {
     promptContent.value = ["पावसाचे बुट बुट थेंब धराक धराक पडता", "माझें मोन खुश आसा आज", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
     promptText.value = promptContent.value[0];
   }
+  promptWords.value = promptText.value.split(' ');
 }
 
 function goToNextPrompt() {
   if (promptIndex < 2) {
     promptIndex++;
-    promptText.value = promptContent.value[promptIndex]
+    promptText.value = promptContent.value[promptIndex];
 
-    transcript.value = ""
+    transcript.value = "";
     recognition.value = null;
     spokenWordIndices.value = [];
     isRecording.value = false;
     hasRecorded.value = false;
-    mediaRecorder.value = null
+    mediaRecorder.value = null;
     audioBlob.value = null;
     audioContext.value = null;
     audioStream.value = null;
     processorNode.value = null;
-    promptWords.value = promptText.value.split(' ')
+    promptWords.value = promptText.value.split(' ');
   }
   else {
-    submitRecording()
+    submitRecording();
   }
 }
 
@@ -252,9 +262,7 @@ const setupAudioRecording = async () => {
 
     recorder.onaudioprocess = (e) => {
       const input = e.inputBuffer.getChannelData(0);
-
       const buffer = new Float32Array(input);
-
       recordedSamples.value.push(buffer);
     };
 
@@ -277,7 +285,7 @@ const setupAudioRecording = async () => {
 };
 
 const toggleRecording = async () => {
-  firstRecordingStarted.value = true
+  firstRecordingStarted.value = true;
   if (!isRecording.value) {
     if (!recognition.value) {
       setupSpeechRecognition();
@@ -352,7 +360,7 @@ const submitRecording = async () => {
     formData.append('file', audioBlob.value, 'recording.wav');
     formData.append('transcript', transcript.value);
     PDFLoading.value = true;
-    console.log(PDFLoading.value)
+    console.log(PDFLoading.value);
     const response = await fetch(`https://305d-14-139-184-222.ngrok-free.app/predict/${disease}`, {
       method: 'POST',
       body: formData,
@@ -360,7 +368,7 @@ const submitRecording = async () => {
 
     if (response.ok) {
       const blob = await response.blob();
-      console.log(blob)
+      console.log(blob);
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
