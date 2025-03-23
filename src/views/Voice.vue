@@ -89,6 +89,8 @@
       </button>
 
     </div>
+
+
     <Transition name="slide-up">
       <div class="next-btn" v-if="hasRecorded" @click="goToNextPrompt" :class="{ loading: PDFLoading }">
         CONTINUE

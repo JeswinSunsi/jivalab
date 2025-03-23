@@ -190,7 +190,7 @@
     border: 1px solid #ddd;
     border-radius: 20px;
     padding: 8px 15px;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
 }
 
@@ -205,7 +205,7 @@
 .section-title {
     padding: 15px;
     margin: 0;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
 }
 
@@ -216,6 +216,7 @@
     padding: 15px;
     border-top: 1px solid #f0f0f0;
     cursor: pointer;
+    font-size: 0.9rem;
 }
 
 .menu-item-left {
@@ -225,12 +226,12 @@
 
 .icon {
     margin-right: 10px;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .chevron {
     color: #999;
-    font-size: 20px;
+    font-size: 10px;
 }
 
 .toggle-item {
@@ -247,13 +248,13 @@
 
 .toggle-title {
     margin: 0;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
 }
 
 .toggle-description {
     margin: 5px 0 0 0;
-    font-size: 14px;
+    font-size: 12px;
     color: #666;
 }
 

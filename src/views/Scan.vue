@@ -267,6 +267,8 @@ const uploadImage = async () => {
 
 .selected-file {
   margin: 0 0 16px 0;
+  width: 100%;
+  text-align: center;
   font-size: 0.9rem;
   color: #0896B6;
 }
