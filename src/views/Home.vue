@@ -7,7 +7,7 @@
           <img src="../assets/bellicon.png" alt="Notifications" class="icon-placeholder">
         </div>
         <div class="profile-icon">
-          <img src="../assets/usericon.png" alt="Notifications" class="icon-placeholder">
+          <img src="../assets/usericon.png" alt="Notifications" class="icon-placeholder" @click="$router.push('/profile')">
         </div>
       </div>
     </header>
@@ -25,8 +25,8 @@
       </section>
 
       <section class="info-cards">
-        <img src="../assets/button1.png" alt="diagnose" @click="$router.push('/scan')">
-        <img src="../assets/button2.png" alt="detect" @click="$router.push('/voice')">
+        <img src="../assets/button1.png" alt="diagnose" @click="$router.push('/scan/pneumonia')">
+        <img src="../assets/button2.png" alt="detect" @click="$router.push('/voice/park')">
       </section>
 
       <section class="recommended-tests">
@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .app-container {
-  max-width: 400px;
+  max-width: 100%;
   margin: 0 auto;
   font-family: Poppins;
   color: #333;
@@ -130,6 +130,7 @@ onBeforeUnmount(() => {
   padding: 16px 20px;
   background-color: #f5f8f9;
   margin-bottom: 1.75rem;
+  width: 100% !important;
 }
 
 .logo {
