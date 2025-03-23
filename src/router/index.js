@@ -5,7 +5,7 @@ import IntroView from '../views/Intro.vue'
 import ScanView from '../views/Scan.vue'
 import VoiceView from '../views/Voice.vue'
 import ProfileView from '../views/Profile.vue'
-
+import ChatView from "../views/Chat.vue"
 
 const routes = [
   { path: '/', component: IntroView },
@@ -13,6 +13,7 @@ const routes = [
   { path: '/profile', component: ProfileView },
   { path: '/scan/:disease', component: ScanView },
   { path: '/voice/:disease', component: VoiceView },
+  { path: '/chat', component: ChatView },
 ]
 
 const router = createRouter({

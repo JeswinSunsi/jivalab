@@ -4,7 +4,7 @@
       <div class="logo">Jiva<span style="font-weight: 400;">lab</span></div>
       <div class="header-icons">
         <div class="notification-icon">
-          <img src="../assets/bellicon.png" alt="Notifications" class="icon-placeholder">
+          <img src="../assets/chat.png" alt="Notifications" class="icon-placeholder" @click="$router.push('/chat')">
         </div>
         <div class="profile-icon">
           <img src="../assets/usericon.png" alt="Notifications" class="icon-placeholder" @click="$router.push('/profile')">
