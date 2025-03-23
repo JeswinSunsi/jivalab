@@ -5,12 +5,14 @@ import IntroView from '../views/Intro.vue'
 import ScanView from '../views/Scan.vue'
 import VoiceView from '../views/Voice.vue'
 import BodyView from '../views/Body.vue'
+import ProfileView from '../views/Profile.vue'
 
 
 const routes = [
   { path: '/', component: IntroView },
   { path: '/home', component: HomeView },
   { path: '/body', component: BodyView },
+  { path: '/profile', component: ProfileView },
   { path: '/scan/:disease', component: ScanView },
   { path: '/voice/:disease', component: VoiceView },
 ]
