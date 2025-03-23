@@ -32,11 +32,11 @@
       <section class="recommended-tests">
         <h2 class="section-title">Recommended Tests</h2>
         <div class="test-tags">
-          <span class="test-tag">Pneumonia</span>
-          <span class="test-tag">Parkinson's Syndrome</span>
-          <span class="test-tag">Brain Tumor</span>
-          <span class="test-tag">Lateral Sclerosis</span>
-          <span class="test-tag">Pneumonia</span>
+          <span class="test-tag" @click="$router.push('/scan/pneumonia')">Pneumonia</span>
+          <span class="test-tag" @click="$router.push('/voice/park')">Parkinson's Syndrome</span>
+          <span class="test-tag" @click="$router.push('/scan/braintumor')">Brain Tumor</span>
+          <span class="test-tag" @click="$router.push('/voice/als')">Lateral Sclerosis</span>
+          <span class="test-tag" @click="$router.push('/voice/dysarthria')">Dysarthia</span>
           <span class="test-tag">Fibrosis</span>
           <span class="test-tag">Lung Cancer</span>
           <span class="test-tag">Pneumothorax</span>
