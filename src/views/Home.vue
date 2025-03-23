@@ -32,14 +32,14 @@
       <section class="recommended-tests">
         <h2 class="section-title">Recommended Tests</h2>
         <div class="test-tags">
-          <span class="test-tag" @click="$router.push('/scan/pneumonia')">Pneumonia</span>
-          <span class="test-tag" @click="$router.push('/voice/park')">Parkinson's Syndrome</span>
-          <span class="test-tag" @click="$router.push('/scan/braintumor')">Brain Tumor</span>
-          <span class="test-tag" @click="$router.push('/voice/als')">Lateral Sclerosis</span>
-          <span class="test-tag" @click="$router.push('/voice/dysarthria')">Dysarthia</span>
-          <span class="test-tag">Fibrosis</span>
-          <span class="test-tag">Lung Cancer</span>
-          <span class="test-tag">Pneumothorax</span>
+          <span class="test-tag" @click="$router.push('/scan/pneumonia')" v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, scale: [1, 1.05, 1], transition: { delay: 100, duration: 500 } }">Pneumonia</span>
+          <span class="test-tag" @click="$router.push('/voice/park')" v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, scale: [1, 1.05, 1], transition: { delay: 300, duration: 500 } }">Parkinson's Syndrome</span>
+          <span class="test-tag" @click="$router.push('/scan/braintumor')" v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, scale: [1, 1.05, 1], transition: { delay: 500, duration: 500 } }">Brain Tumor</span>
+          <span class="test-tag" @click="$router.push('/voice/als')" v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, scale: [1, 1.05, 1], transition: { delay: 700, duration: 500 } }">Lateral Sclerosis</span>
+          <span class="test-tag" @click="$router.push('/voice/dysarthria')" v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, scale: [1, 1.05, 1], transition: { delay: 900, duration: 500 } }">Dysarthia</span>
+          <span class="test-tag" v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, scale: [1, 1.05, 1], transition: { delay: 1100, duration: 500 } }">Fibrosis</span>
+          <span class="test-tag" v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, scale: [1, 1.05, 1], transition: { delay: 1300, duration: 500 } }">Lung Cancer</span>
+          <span class="test-tag" v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, scale: [1, 1.05, 1], transition: { delay: 1400, duration: 500 } }">Pneumothorax</span>
         </div>
       </section>
 
