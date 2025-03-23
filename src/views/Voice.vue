@@ -24,7 +24,6 @@
         </div>
   
         <h2 class="title">Voice Analysis Instructions</h2>
-  
         <div class="instructions-list">
           <div class="instruction-item">
             <div class="instruction-number">1</div>
@@ -47,16 +46,390 @@
             </div>
           </div>
         </div>
-  
-        <button class="record-button">I'm Ready To Record</button>
+        
+
+
+        <span style="display: flex; flex-direction: column; align-items: start;" v-show="firstRecordingStarted">
+          <div class="prompt-box" >
+            <p v-if="selectedLanguage == 'english'">
+                <span v-for="(word, index) in promptWords" :key="index"
+                    :class="{ 'spoken-word': spokenWordIndices.includes(index) }">
+                    {{ word }}{{ index < promptWords.length - 1 ? ' ' : '' }} </span>
+            </p>
+            <p v-if="selectedLanguage != 'english'">
+                {{ promptText }}
+            </p>
+        </div>
+
+          <select v-model="selectedLanguage" @change="changeLanguage" style="margin-left: 1rem; margin-bottom: 1rem; height: 2rem; width: 25%; border-radius: 0.5rem;">
+            <option value="english">English</option>
+            <option value="tamil">Tamil</option>
+            <option value="hindi">Hindi</option>
+            <option value="malayalam">Malayalam</option>
+            <option value="konkani">Konkani</option>
+        </select>
+        </span>
+
+
+        <button class="record-button" @click="toggleRecording" v-show="!hasRecorded">
+          {{ isRecording ? 'Recording...' : "I'm ready" }}
+        </button>
+        
       </div>
+      <Transition name="slide-up">
+            <div class="next-btn" v-if="hasRecorded" @click="goToNextPrompt" :class="{loading: PDFLoading}">
+                CONTINUE
+            </div>
+        </Transition>
     </div>
   </template>
   
   <script setup>
+  import { ref } from 'vue';
+
+  const isRecording = ref(false);
+const hasRecorded = ref(false);
+const transcript = ref('');
+const recognition = ref(null);
+const spokenWordIndices = ref([]);
+let promptIndex = 0
+const promptContent = ref(["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"])
+let promptText = ref("THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING")
+const promptWords = ref(promptText.value.split(' '))
+const firstRecordingStarted = ref(false)
+
+const selectedLanguage = ref('english')
+
+const PDFLoading = ref(false)
+const mediaRecorder = ref(null);
+const audioContext = ref(null);
+const audioStream = ref(null);
+const audioBlob = ref(null);
+const processorNode = ref(null);
+const recordedSamples = ref([]);
+
+
+function changeLanguage(){
+    console.log(selectedLanguage.value)
+    if (selectedLanguage.value === "english") {
+    promptContent.value = ["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptText.value = promptContent.value[0];
+} else if (selectedLanguage.value === "tamil") {
+    promptContent.value = ["இது ஒரு அழகான நாள்", "செய்யும் தொழிலே தெய்வம்", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptText.value = promptContent.value[0];
+} else if (selectedLanguage.value === "malayalam") {
+    promptContent.value = ["വിത്തു നല്ലതെങ്കിൽ വിളയും നല്ലത്", "സ്വപ്‌നങ്ങൾക്ക് ചിറകുകളുണ്ടാകും!", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptText.value = promptContent.value[0];
+} else if (selectedLanguage.value === "hindi") {
+    promptContent.value = ["आज आसमान बिल्कुल साफ़ और नीला है", "तूफ़ान के बाद इंद्रधनुष आता है", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptText.value = promptContent.value[0];
+} else if (selectedLanguage.value === "konkani") {
+    promptContent.value = ["पावसाचे बुट बुट थेंब धराक धराक पडता", "माझें मोन खुश आसा आज", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptText.value = promptContent.value[0];
+}
+}
+
+function goToNextPrompt() {
+    if (promptIndex < 2){
+        promptIndex++;
+        promptText.value = promptContent.value[promptIndex]
+
+        transcript.value = ""
+        recognition.value = null;
+        spokenWordIndices.value = [];
+        isRecording.value = false;
+        hasRecorded.value = false;
+        mediaRecorder.value = null
+        audioBlob.value = null;
+        audioContext.value = null;
+        audioStream.value = null;
+        processorNode.value = null;
+        promptWords.value = promptText.value.split(' ')
+    }
+    else {
+        submitRecording()
+    }
+}
+
+const setupSpeechRecognition = () => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition.value = new SpeechRecognition();
+        recognition.value.continuous = true;
+        recognition.value.interimResults = true;
+        
+
+        recognition.value.onresult = (event) => {
+            let interimTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    transcript.value += event.results[i][0].transcript;
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+
+            const fullTranscript = (transcript.value + interimTranscript).toUpperCase();
+
+            promptWords.value.forEach((word, index) => {
+                if (fullTranscript.includes(word) && !spokenWordIndices.value.includes(index)) {
+                    spokenWordIndices.value.push(index);
+                }
+            });
+
+            if (spokenWordIndices.value.length === promptWords.value.length) {
+                stopRecording();
+            }
+        };
+
+        recognition.value.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+        };
+    } else {
+        alert('Your browser does not support speech recognition. Please try a different browser.');
+    }
+};
+
+function encodeWAV(samples, sampleRate = 44100) {
+    const buffer = new ArrayBuffer(44 + samples.length * 2);
+    const view = new DataView(buffer);
+
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 32 + samples.length * 2, true);
+    writeString(view, 8, 'WAVE');
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(view, 36, 'data');
+    view.setUint32(40, samples.length * 2, true);
+
+    // Write the PCM samples
+    floatTo16BitPCM(view, 44, samples);
+
+    return view.buffer;
+}
+
+function writeString(view, offset, string) {
+    for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+    }
+}
+
+function floatTo16BitPCM(output, offset, input) {
+    for (let i = 0; i < input.length; i++, offset += 2) {
+        const s = Math.max(-1, Math.min(1, input[i]));
+        output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+    }
+}
+
+const setupAudioRecording = async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioStream.value = stream;
+
+        audioContext.value = new (window.AudioContext || window.webkitAudioContext)({
+            sampleRate: 44100 // Standard sample rate for good compatibility
+        });
+
+        const source = audioContext.value.createMediaStreamSource(stream);
+
+        const bufferSize = 4096;
+        const recorder = audioContext.value.createScriptProcessor(bufferSize, 1, 1);
+
+        recorder.onaudioprocess = (e) => {
+            const input = e.inputBuffer.getChannelData(0);
+
+            const buffer = new Float32Array(input);
+
+            recordedSamples.value.push(buffer);
+        };
+
+        source.connect(recorder);
+        recorder.connect(audioContext.value.destination);
+
+        // Store references
+        processorNode.value = recorder;
+        mediaRecorder.value = {
+            isRecording: true
+        };
+
+        console.log('Audio recording setup complete with standard WAV parameters');
+        return true;
+    } catch (error) {
+        console.error('Error accessing microphone:', error);
+        alert('Unable to access your microphone. Please check permissions and try again.');
+        return false;
+    }
+};
+
+const toggleRecording = async () => {
+  firstRecordingStarted.value = true
+    if (!isRecording.value) {
+        if (!recognition.value) {
+            setupSpeechRecognition();
+        }
+        const audioSetupSuccess = await setupAudioRecording();
+        if (!audioSetupSuccess) return;
+
+        startRecording();
+    } else {
+        stopRecording();
+    }
+};
+
+const startRecording = () => {
+    isRecording.value = true;
+    recordedSamples.value = [];
+
+    if (recognition.value) {
+        transcript.value = '';
+        spokenWordIndices.value = [];
+        recognition.value.start();
+    }
+
+    console.log('Started recording audio and speech recognition');
+};
+
+const stopRecording = () => {
+    isRecording.value = false;
+    hasRecorded.value = true;
+
+    if (recognition.value) {
+        recognition.value.stop();
+    }
+    if (processorNode.value) {
+        processorNode.value.disconnect();
+
+        let sampleLength = 0;
+        for (const buffer of recordedSamples.value) {
+            sampleLength += buffer.length;
+        }
+
+        const mergedSamples = new Float32Array(sampleLength);
+        let offset = 0;
+
+        for (const buffer of recordedSamples.value) {
+            mergedSamples.set(buffer, offset);
+            offset += buffer.length;
+        }
+
+        const wavBuffer = encodeWAV(mergedSamples, audioContext.value.sampleRate);
+
+        audioBlob.value = new Blob([wavBuffer], { type: 'audio/wav' });
+
+        console.log('Stopped recording, created WAV file with size:', audioBlob.value.size, 'bytes');
+
+        if (audioStream.value) {
+            audioStream.value.getTracks().forEach(track => track.stop());
+        }
+    }
+};
+
+const submitRecording = async () => {
+    if (!audioBlob.value) {
+        console.error('No audio recording available');
+        return;
+    }
+
+    try {
+        console.log('Sending WAV file of size:', audioBlob.value.size, 'bytes');
+
+        const formData = new FormData();
+        formData.append('file', audioBlob.value, 'recording.wav');
+        formData.append('transcript', transcript.value);
+        PDFLoading.value = true;
+        const response = await fetch('https://neurotone-docker.onrender.com/analyze', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = 'analysis.pdf';
+            link.target = '_blank';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Clean up the URL object
+            window.URL.revokeObjectURL(downloadUrl);
+        } else {
+            const errorText = await response.text();
+            console.error('Failed to submit recording:', errorText);
+            alert('Failed to submit recording: ' + errorText);
+        }
+    } catch (error) {
+        console.error('Error submitting recording:', error);
+        alert('Error submitting recording. Please check your connection and try again.');
+    }
+};
   </script>
   
   <style scoped>
+  .prompt-box {
+    border: 1px solid #008CA4;
+    color: #cfe9ff;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0.8rem 1rem;
+    margin-bottom: 0.4rem;
+    padding: 4rem 1rem;
+    border-radius: 0.9rem;
+    transition: all 0.3s ease;
+    line-height: 2.5rem;
+}
+
+.loading {
+    background-color: #f5b4d3;
+}
+
+.next-btn {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 4rem;
+    background-color: #008CA4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+    transition: transform 0.5s ease;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+    transform: translateY(200%);
+}
+
+.slide-up-enter-to,
+.slide-up-leave-from {
+    transform: translateY(0);
+}
+
+.spoken-word {
+    color: #008CA4;
+    transition: color 0.3s ease;
+}
+
   .jivalab-container {
     font-family: Poppins;
     max-width: 414px;
