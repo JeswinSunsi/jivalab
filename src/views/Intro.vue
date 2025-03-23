@@ -20,17 +20,17 @@
         <div class="conditions-section">
           <div class="scrolling-container">
             <div class="condition-row row-1">
-              <button class="condition-button">Bronchiectasis</button>
-              <button class="condition-button">Parkinson's Syndrome</button>
-              <button class="condition-button">Pneumothorax</button>
-              <button class="condition-button">Asthma</button>
-              <button class="condition-button">Tuberculosis</button>
+              <span class="test-tag">Pneumonia</span>
+            <span class="test-tag">Parkinson's Syndrome</span>
+            <span class="test-tag">Brain Tumor</span>
+            <span class="test-tag">Lateral Sclerosis</span>
+            <span class="test-tag">Pneumonia</span>
               <!-- Duplicate buttons for continuous scrolling effect -->
-              <button class="condition-button">Bronchiectasis</button>
-              <button class="condition-button">Parkinson's Syndrome</button>
-              <button class="condition-button">Pneumothorax</button>
-              <button class="condition-button">Asthma</button>
-              <button class="condition-button">Tuberculosis</button>
+              <span class="test-tag">Pneumonia</span>
+              <span class="test-tag">Parkinson's Syndrome</span>
+              <span class="test-tag">Brain Tumor</span>
+              <span class="test-tag">Lateral Sclerosis</span>
+              <span class="test-tag">Pneumonia</span>
             </div>
           </div>
           
@@ -38,13 +38,13 @@
             <div class="condition-row row-2">
               <button class="condition-button">Bronchiolitis</button>
               <button class="condition-button">COPD</button>
-              <button class="condition-button">Pneumonia</button>
+              <button class="condition-button">Dysarthia</button>
               <button class="condition-button">Lung Cancer</button>
               <button class="condition-button">Heart Disease</button>
               <!-- Duplicate buttons for continuous scrolling effect -->
               <button class="condition-button">Bronchiolitis</button>
               <button class="condition-button">COPD</button>
-              <button class="condition-button">Pneumonia</button>
+              <button class="condition-button">Dysarthia</button>
               <button class="condition-button">Lung Cancer</button>
               <button class="condition-button">Heart Disease</button>
             </div>

@@ -34,10 +34,10 @@
         <section class="recommended-tests">
           <h2 class="section-title">Recommended Tests</h2>
           <div class="test-tags">
-            <span class="test-tag">Bronchiectasis</span>
+            <span class="test-tag">Pneumonia</span>
             <span class="test-tag">Parkinson's Syndrome</span>
-            <span class="test-tag">Bronchiolitis</span>
-            <span class="test-tag">COPD</span>
+            <span class="test-tag">Brain Tumor</span>
+            <span class="test-tag">Lateral Sclerosis</span>
             <span class="test-tag">Pneumonia</span>
             <span class="test-tag">Fibrosis</span>
             <span class="test-tag">Lung Cancer</span>
