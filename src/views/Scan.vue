@@ -100,19 +100,29 @@ const uploadImage = async () => {
     const formData = new FormData();
     formData.append('file', file);
     
-    const response = await fetch(`https://305d-14-139-184-222.ngrok-free.app/predict/${disease}`, {
+    const response = await fetch(`https://d6ed-103-4-221-252.ngrok-free.app/predict/${disease}`, {
       method: 'POST',
       body: formData
     });
     
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+    if (response.ok) {
+      const blob = await response.blob();
+      console.log(blob);
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = 'analysis.pdf';
+      link.target = '_blank';
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+    } else {
+      const errorText = await response.text();
+      console.error('Failed to submit recording:', errorText);
+      alert('Failed to submit recording: ' + errorText);
     }
-    
-    // Parse and store the JSON response
-    const data = await response.json();
-    apiResponse.value = data;
-    console.log(apiResponse.value);
     
   } catch (error) {
     console.error('Error uploading image:', error);

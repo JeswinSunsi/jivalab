@@ -362,7 +362,7 @@ const submitRecording = async () => {
     formData.append('transcript', transcript.value);
     PDFLoading.value = true;
     console.log(PDFLoading.value);
-    const response = await fetch(`https://305d-14-139-184-222.ngrok-free.app/predict/${disease}`, {
+    const response = await fetch(`https://5704-2401-4900-7b8e-2181-d9d6-75e4-15ad-1bad.ngrok-free.app/predict/${disease}`, {
       method: 'POST',
       body: formData,
     });

@@ -86,15 +86,18 @@
       scrollToBottom();
       
       isLoading.value = true;
-      
+      console.log(messageText)
       try {
-        const response = await fetch('https://305d-14-139-184-222.ngrok-free.app/chat', {
+        const response = await fetch('https://d6ed-103-4-221-252.ngrok-free.app/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
+          body: JSON.stringify({
+            'prompt': messageText
+          })
         });
-        
+        console.log(messageText)
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -102,11 +105,15 @@
         const data = await response.json();
         
         const botMessage = {
-          text: data.response || data, 
+          text: data.response.overview || data, 
+          sender: 'bot'
+        };
+        const botMessageTwo = {
+          text: data.response.recommendations || data, 
           sender: 'bot'
         };
         
-        messages.value.push(botMessage);
+        messages.value.push(botMessageTwo);
         scrollToBottom();
         
       } catch (error) {
