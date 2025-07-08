@@ -3,6 +3,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 import HomeView from '../views/Home.vue'
 import IntroView from '../views/Intro.vue'
 import ScanView from '../views/Scan.vue'
+import ScanTextView from '../views/ScanText.vue'
 import VoiceView from '../views/Voice.vue'
 import ProfileView from '../views/Profile.vue'
 import ChatView from "../views/Chat.vue"
@@ -14,6 +15,7 @@ const routes = [
   { path: '/scan/:disease', component: ScanView },
   { path: '/voice/:disease', component: VoiceView },
   { path: '/chat', component: ChatView },
+  { path: '/scantext', component: ScanTextView },
 ]
 
 const router = createRouter({

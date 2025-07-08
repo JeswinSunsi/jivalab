@@ -88,7 +88,7 @@
       isLoading.value = true;
       console.log(messageText)
       try {
-        const response = await fetch('https://d6ed-103-4-221-252.ngrok-free.app/chat', {
+        const response = await fetch('https://9aeb-103-4-222-252.ngrok-free.app/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

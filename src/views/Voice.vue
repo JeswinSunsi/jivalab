@@ -112,7 +112,7 @@ const transcript = ref('');
 const recognition = ref(null);
 const spokenWordIndices = ref([]);
 let promptIndex = 0;
-const promptContent = ref(["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"]);
+const promptContent = ref(["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"]);
 let promptText = ref("THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING");
 const promptWords = ref(promptText.value.split(' '));
 const firstRecordingStarted = ref(false);
@@ -130,26 +130,26 @@ const recordedSamples = ref([]);
 function changeLanguage() {
   console.log(selectedLanguage.value);
   if (selectedLanguage.value === "english") {
-    promptContent.value = ["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptContent.value = ["THE GENTLE BREEZE MAKES THIS AFTERNOON QUITE REFRESHING", "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"];
     promptText.value = promptContent.value[0];
   } else if (selectedLanguage.value === "tamil") {
-    promptContent.value = ["இது ஒரு அழகான நாள்", "செய்யும் தொழிலே தெய்வம்", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptContent.value = ["இது ஒரு அழகான நாள்", "செய்யும் தொழிலே தெய்வம்"];
     promptText.value = promptContent.value[0];
   } else if (selectedLanguage.value === "malayalam") {
-    promptContent.value = ["വിത്തു നല്ലതെങ്കിൽ വിളയും നല്ലത്", "സ്വപ്‌നങ്ങൾക്ക് ചിറകുകളുണ്ടാകും!", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptContent.value = ["വിത്തു നല്ലതെങ്കിൽ വിളയും നല്ലത്", "സ്വപ്‌നങ്ങൾക്ക് ചിറകുകളുണ്ടാകും!"];
     promptText.value = promptContent.value[0];
   } else if (selectedLanguage.value === "hindi") {
-    promptContent.value = ["आज आसमान बिल्कुल साफ़ और नीला है", "तूफ़ान के बाद इंद्रधनुष आता है", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptContent.value = ["आज आसमान बिल्कुल साफ़ और नीला है", "तूफ़ान के बाद इंद्रधनुष आता है"];
     promptText.value = promptContent.value[0];
   } else if (selectedLanguage.value === "konkani") {
-    promptContent.value = ["पावसाचे बुट बुट थेंब धराक धराक पडता", "माझें मोन खुश आसा आज", "{SAY AAAAHH WITHOUT MOVING YOUR LIPS}"];
+    promptContent.value = ["पावसाचे बुट बुट थेंब धराक धराक पडता", "माझें मोन खुश आसा आज"];
     promptText.value = promptContent.value[0];
   }
   promptWords.value = promptText.value.split(' ');
 }
 
 function goToNextPrompt() {
-  if (promptIndex < 2) {
+  if (promptIndex < 1) {
     promptIndex++;
     promptText.value = promptContent.value[promptIndex];
 
@@ -362,7 +362,7 @@ const submitRecording = async () => {
     formData.append('transcript', transcript.value);
     PDFLoading.value = true;
     console.log(PDFLoading.value);
-    const response = await fetch(`https://5704-2401-4900-7b8e-2181-d9d6-75e4-15ad-1bad.ngrok-free.app/predict/${disease}`, {
+    const response = await fetch(`https://9aeb-103-4-222-252.ngrok-free.app/predict/${disease}`, {
       method: 'POST',
       body: formData,
     });

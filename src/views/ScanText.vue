@@ -57,21 +57,25 @@
         {{ isLoading ? 'Uploading...' : 'My files are ready' }}
       </button>
     </div>
+    <div class="result-card" v-if="scanText">
+      <h1>Prediction Result Analysis</h1>
+      <h2>Pneumonia Classification: <span style="font-weight: 600;">{{ scanText.predicted_class }}</span></h2>
+      <h2>Percentage Classification: <span style="font-weight: 600;">{{ scanText.pneumonia_probability }}</span></h2>
+      <h4>{{ scanText.recommendation }} 
+      </h4>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
-import { useRoute } from "vue-router"
-const route = useRoute()
-const disease = route.params.disease
-
 const fileInput = ref(null);
 const hasImage = ref(false);
 const isLoading = ref(false);
 const apiResponse = ref(null);
 const selectedFileName = ref('');
+const scanText = ref("")
 
 const triggerFileInput = () => {
   fileInput.value.click();
@@ -100,24 +104,15 @@ const uploadImage = async () => {
     const formData = new FormData();
     formData.append('file', file);
     
-    const response = await fetch(`https://9aeb-103-4-222-252.ngrok-free.app/predict/${disease}`, {
+    const response = await fetch(`https://9aeb-103-4-222-252.ngrok-free.app/predict/pneumonia`, {
       method: 'POST',
       body: formData
     });
     
     if (response.ok) {
-      const blob = await response.blob();
-      console.log(blob);
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = 'analysis.pdf';
-      link.target = '_blank';
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(downloadUrl);
+      const jsonResponse = await response.json(); 
+      scanText.value = jsonResponse;
+      console.log(scanText.value);
     } else {
       const errorText = await response.text();
       console.error('Failed to submit recording:', errorText);
@@ -183,6 +178,7 @@ const uploadImage = async () => {
   background-color: #fff;
   border-radius: 10px;
   margin: 16px;
+  margin-bottom: 0rem;
   padding-bottom: 0.9rem;
   display: flex;
   flex-direction: column;
@@ -209,6 +205,33 @@ const uploadImage = async () => {
   width: auto;
 }
 
+.result-card {
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 16px;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  border: #0896B6 0.5px solid;
+}
+
+.result-card h1 {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.result-card h2 {
+  margin-bottom: 0.5rem;
+font-size: 0.9rem;
+}
+
+
+.result-card h4 {
+  font-size: 0.8rem;
+  line-height: 1.3rem;
+  margin-top: 1rem  ;
+}
 .mic-icon-container {
   background-color: rgba(99, 180, 121, 0.1);
   width: 7rem;
